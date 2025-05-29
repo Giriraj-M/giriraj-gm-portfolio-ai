@@ -1,12 +1,12 @@
-
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Copy, CheckCircle, Sparkles, Brain } from 'lucide-react';
+import { MessageCircle, X, Send, Copy, CheckCircle, Sparkles, Brain, ArrowRight } from 'lucide-react';
 
 interface Message {
   id: number;
   text: string;
   isBot: boolean;
   timestamp: Date;
+  relatedQuestions?: string[];
 }
 
 interface Suggestion {
@@ -91,6 +91,56 @@ const Chatbot = () => {
     }
   }, [isOpen]);
 
+  const getRelatedQuestions = (userMessage: string, botResponse: string): string[] => {
+    const message = userMessage.toLowerCase();
+    
+    // Related questions based on the topic
+    if (message.includes('background') || message.includes('about')) {
+      return [
+        "What programming languages does he know?",
+        "What's his academic performance?",
+        "What work experience does he have?"
+      ];
+    } else if (message.includes('programming') || message.includes('languages')) {
+      return [
+        "Which ML/AI frameworks does he use?",
+        "What cloud platforms is he experienced with?",
+        "Tell me about his database skills"
+      ];
+    } else if (message.includes('project')) {
+      return [
+        "What computer vision work has he done?",
+        "Tell me about his NLP projects",
+        "What's his most impressive project?"
+      ];
+    } else if (message.includes('education') || message.includes('academic')) {
+      return [
+        "What certifications does he have?",
+        "What's his GPA?",
+        "Is he involved in research?"
+      ];
+    } else if (message.includes('experience') || message.includes('work')) {
+      return [
+        "What awards has he won?",
+        "Tell me about his hackathon wins",
+        "What leadership roles has he taken?"
+      ];
+    } else if (message.includes('contact') || message.includes('reach')) {
+      return [
+        "Where is he located?",
+        "What social platforms is he on?",
+        "Is he available for freelance work?"
+      ];
+    }
+    
+    // Default related questions
+    return [
+      "Tell me about his technical skills",
+      "What projects has he worked on?",
+      "How can I contact him?"
+    ];
+  };
+
   const botResponses = {
     // General & Background
     background: "Giriraj M is a passionate Machine Learning Engineer and Computer Science student at Dr. Mahalingam College of Engineering and Technology (2022-2026). With a current GPA of 8.5/10, he specializes in developing cutting-edge AI/ML solutions.\n\n🎯 Core Focus Areas:\n• Machine Learning & Deep Learning\n• Computer Vision & Image Processing\n• Natural Language Processing\n• Predictive Analytics & Data Science\n• Full-stack AI Application Development\n\n🌟 What sets him apart:\n• Strong foundation in both theoretical concepts and practical implementation\n• Experience with end-to-end ML pipeline development\n• Active contributor to open-source AI projects\n• Published research in AI/ML domains\n• Proven track record in hackathons and competitions",
@@ -137,78 +187,82 @@ const Chatbot = () => {
     default: "That's a great question! I'm Giriraj's comprehensive AI assistant with detailed knowledge about:\n\n🎯 **Portfolio Categories Available:**\n\n1. **General & Background** - Personal summary, unique qualities\n2. **Technical Skills** - Programming, frameworks, cloud platforms  \n3. **Projects & Work** - AI/ML projects, computer vision, NLP\n4. **Education** - Academic background, performance, research\n5. **Experience** - Internships, work history, achievements\n6. **Contact & Collaboration** - Ways to connect, availability\n\nYou can ask specific questions about any of these areas, or use the category buttons below to explore different aspects of Giriraj's expertise. I'm here to provide detailed, accurate information about his skills, experience, and how you can work together!"
   };
 
-  const generateBotResponse = (userMessage: string): string => {
+  const generateBotResponse = (userMessage: string): { response: string; relatedQuestions: string[] } => {
     const message = userMessage.toLowerCase();
+    let response = "";
     
-    // General & Background
+    // Generate response based on user message
     if (message.includes('background') || message.includes('summary') || message.includes('about')) {
-      return botResponses.background;
+      response = botResponses.background;
     } else if (message.includes('unique') || message.includes('special') || message.includes('different')) {
-      return botResponses.unique;
+      response = botResponses.unique;
     } else if (message.includes('professional summary') || message.includes('overview')) {
-      return botResponses.summary;
+      response = botResponses.summary;
     }
     
     // Technical Skills
     else if (message.includes('programming') || message.includes('languages') || message.includes('python') || message.includes('javascript')) {
-      return botResponses.programming;
+      response = botResponses.programming;
     } else if (message.includes('framework') || message.includes('pytorch') || message.includes('tensorflow') || message.includes('library')) {
-      return botResponses.frameworks;
+      response = botResponses.frameworks;
     } else if (message.includes('cloud') || message.includes('aws') || message.includes('docker') || message.includes('deployment')) {
-      return botResponses.cloud;
+      response = botResponses.cloud;
     } else if (message.includes('database') || message.includes('sql') || message.includes('mongodb')) {
-      return botResponses.cloud;
+      response = botResponses.cloud;
     }
     
     // Projects
     else if (message.includes('project') && (message.includes('impressive') || message.includes('best') || message.includes('top'))) {
-      return botResponses.projects;
+      response = botResponses.projects;
     } else if (message.includes('computer vision') || message.includes('image') || message.includes('opencv') || message.includes('yolo')) {
-      return botResponses.computer_vision;
+      response = botResponses.computer_vision;
     } else if (message.includes('nlp') || message.includes('natural language') || message.includes('text') || message.includes('language processing')) {
-      return botResponses.nlp;
+      response = botResponses.nlp;
     } else if (message.includes('web') || message.includes('application') || message.includes('platform')) {
-      return botResponses.projects;
+      response = botResponses.projects;
     }
     
     // Education
     else if (message.includes('education') || message.includes('college') || message.includes('study') || message.includes('degree')) {
-      return botResponses.education;
+      response = botResponses.education;
     } else if (message.includes('gpa') || message.includes('academic') || message.includes('performance') || message.includes('grades')) {
-      return botResponses.academic_performance;
+      response = botResponses.academic_performance;
     } else if (message.includes('certification') || message.includes('course') || message.includes('certificate')) {
-      return botResponses.certifications;
+      response = botResponses.certifications;
     } else if (message.includes('research') || message.includes('publication') || message.includes('paper')) {
-      return botResponses.academic_performance;
+      response = botResponses.academic_performance;
     }
     
     // Experience & Achievements
     else if (message.includes('experience') || message.includes('internship') || message.includes('job') || message.includes('work')) {
-      return botResponses.experience;
+      response = botResponses.experience;
     } else if (message.includes('achievement') || message.includes('award') || message.includes('recognition') || message.includes('accomplishment')) {
-      return botResponses.achievements;
+      response = botResponses.achievements;
     } else if (message.includes('hackathon') || message.includes('competition') || message.includes('contest')) {
-      return botResponses.achievements;
+      response = botResponses.achievements;
     } else if (message.includes('leadership') || message.includes('mentor') || message.includes('lead')) {
-      return botResponses.achievements;
+      response = botResponses.achievements;
     }
     
     // Contact & Collaboration
     else if (message.includes('contact') || message.includes('email') || message.includes('reach') || message.includes('connect')) {
-      return botResponses.contact;
+      response = botResponses.contact;
     } else if (message.includes('location') || message.includes('where') || message.includes('based') || message.includes('live')) {
-      return botResponses.location;
+      response = botResponses.location;
     } else if (message.includes('social') || message.includes('linkedin') || message.includes('github') || message.includes('platform')) {
-      return botResponses.social;
+      response = botResponses.social;
     } else if (message.includes('freelance') || message.includes('available') || message.includes('hire') || message.includes('contract')) {
-      return botResponses.freelance;
+      response = botResponses.freelance;
     } else if (message.includes('collaborate') || message.includes('work together') || message.includes('partnership')) {
-      return botResponses.freelance;
+      response = botResponses.freelance;
     }
     
     else {
-      return botResponses.default;
+      response = botResponses.default;
     }
+    
+    const relatedQuestions = getRelatedQuestions(userMessage, response);
+    return { response, relatedQuestions };
   };
 
   const handleSendMessage = async (messageText?: string) => {
@@ -229,11 +283,13 @@ const Chatbot = () => {
 
     // Simulate bot typing delay
     setTimeout(() => {
+      const { response, relatedQuestions } = generateBotResponse(textToSend);
       const botResponse: Message = {
         id: Date.now() + 1,
-        text: generateBotResponse(textToSend),
+        text: response,
         isBot: true,
-        timestamp: new Date()
+        timestamp: new Date(),
+        relatedQuestions
       };
       setMessages(prev => [...prev, botResponse]);
       setIsTyping(false);
@@ -242,6 +298,10 @@ const Chatbot = () => {
 
   const handleSuggestionClick = (suggestion: Suggestion) => {
     handleSendMessage(suggestion.question);
+  };
+
+  const handleRelatedQuestionClick = (question: string) => {
+    handleSendMessage(question);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -313,35 +373,54 @@ const Chatbot = () => {
           {/* Messages */}
           <div className="max-h-96 overflow-y-auto p-4 space-y-4" style={{ minHeight: 'auto' }}>
             {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
-                <div className="group max-w-[80%] relative">
-                  <div
-                    className={`p-3 rounded-2xl break-words ${
-                      message.isBot
-                        ? 'bg-gradient-to-r from-gray-700/60 to-gray-600/60 text-white border border-gray-600/30'
-                        : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
-                    } shadow-lg backdrop-blur-sm`}
-                  >
-                    <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
+              <div key={message.id}>
+                <div className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}>
+                  <div className="group max-w-[80%] relative">
+                    <div
+                      className={`p-3 rounded-2xl break-words ${
+                        message.isBot
+                          ? 'bg-gradient-to-r from-gray-700/60 to-gray-600/60 text-white border border-gray-600/30'
+                          : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white'
+                      } shadow-lg backdrop-blur-sm`}
+                    >
+                      <p className="text-sm leading-relaxed whitespace-pre-line">{message.text}</p>
+                    </div>
+                    
+                    {/* Copy button */}
+                    <button
+                      onClick={() => copyToClipboard(message.text, message.id)}
+                      className="absolute -right-2 -top-2 w-6 h-6 bg-gray-600 hover:bg-gray-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
+                      title="Copy message"
+                    >
+                      {copiedMessageId === message.id ? (
+                        <CheckCircle className="w-3 h-3 text-green-400" />
+                      ) : (
+                        <Copy className="w-3 h-3 text-white" />
+                      )}
+                    </button>
+                    
+                    <p className="text-xs text-gray-400 mt-1 text-center">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
-                  
-                  {/* Copy button */}
-                  <button
-                    onClick={() => copyToClipboard(message.text, message.id)}
-                    className="absolute -right-2 -top-2 w-6 h-6 bg-gray-600 hover:bg-gray-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
-                    title="Copy message"
-                  >
-                    {copiedMessageId === message.id ? (
-                      <CheckCircle className="w-3 h-3 text-green-400" />
-                    ) : (
-                      <Copy className="w-3 h-3 text-white" />
-                    )}
-                  </button>
-                  
-                  <p className="text-xs text-gray-400 mt-1 text-center">
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </p>
                 </div>
+
+                {/* Related Questions */}
+                {message.isBot && message.relatedQuestions && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-xs text-gray-400 mb-2">💡 Related questions you might ask:</p>
+                    {message.relatedQuestions.map((question, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleRelatedQuestionClick(question)}
+                        className="w-full text-left p-2 bg-gray-800/30 hover:bg-gray-700/40 rounded-lg text-cyan-400 text-xs transition-all duration-300 border border-gray-700/20 hover:border-cyan-500/30 flex items-center space-x-2"
+                      >
+                        <ArrowRight className="w-3 h-3" />
+                        <span>{question}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             
@@ -410,7 +489,7 @@ const Chatbot = () => {
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Ask about skills, projects, experience, or anything else..."
                 className="flex-1 bg-gray-700/50 text-white placeholder-gray-400 px-4 py-3 rounded-xl border border-gray-600/30 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 text-sm backdrop-blur-sm"
               />

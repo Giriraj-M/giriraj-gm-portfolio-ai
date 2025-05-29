@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Github, ExternalLink, Clock, CheckCircle, Zap } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('All Projects');
@@ -131,31 +132,35 @@ const Projects = () => {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project, index) => (
-            <div 
+            <Card 
               key={index} 
-              className="group bg-gray-800/50 rounded-2xl overflow-hidden border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 backdrop-blur-sm animate-fade-in"
+              className="group bg-gray-800/50 border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 hover:transform hover:scale-105 backdrop-blur-sm animate-fade-in"
               style={{
                 animationDelay: `${index * 0.1}s`
               }}
             >
-              <div className="h-48 bg-gradient-to-br from-gray-700/50 to-gray-800/50 flex items-center justify-center relative overflow-hidden">
+              <div className="h-48 bg-gradient-to-br from-gray-700/50 to-gray-800/50 flex items-center justify-center relative overflow-hidden rounded-t-lg">
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 group-hover:from-cyan-500/20 group-hover:to-purple-500/20 transition-all duration-300"></div>
                 <span className="text-gray-400 relative z-10">{project.image}</span>
               </div>
               
-              <div className="p-6">
+              <CardHeader className="pb-4">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-300">
+                  <CardTitle className="text-xl text-white group-hover:text-cyan-400 transition-colors duration-300">
                     {project.title}
-                  </h3>
+                  </CardTitle>
                   <div className={`flex items-center space-x-1 px-2 py-1 rounded-lg border text-xs font-semibold ${getStatusColor(project.status)}`}>
                     {getStatusIcon(project.status)}
                     <span>{project.status}</span>
                   </div>
                 </div>
                 
-                <p className="text-gray-300 mb-4 line-clamp-2">{project.description}</p>
-                
+                <CardDescription className="text-gray-300 line-clamp-2">
+                  {project.description}
+                </CardDescription>
+              </CardHeader>
+
+              <CardContent className="pt-0">
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tech.map((tech, techIndex) => (
                     <span key={techIndex} className="bg-gray-700/50 text-cyan-400 px-3 py-1 rounded-full text-sm border border-gray-600/50">
@@ -179,8 +184,8 @@ const Projects = () => {
                   </button>
                   <ExternalLink className="w-5 h-5 text-gray-500 group-hover:text-cyan-400 transform group-hover:rotate-12 transition-all duration-300" />
                 </div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>

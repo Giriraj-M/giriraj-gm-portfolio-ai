@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Brain, Code, Wrench, TrendingUp, Zap, Target } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 const Skills = () => {
   const [activeCategory, setActiveCategory] = useState('AIML');
@@ -190,60 +191,64 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* Skills Display */}
+        {/* Skills Display with Cards */}
         <div className="grid lg:grid-cols-2 gap-8">
           {skillCategories[activeCategory as keyof typeof skillCategories].skills.map((skill, index) => {
             const colorClasses = getColorClasses(skillCategories[activeCategory as keyof typeof skillCategories].color);
             
             return (
-              <div 
+              <Card 
                 key={skill.name} 
-                className={`group bg-gray-800/50 p-6 rounded-2xl border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 backdrop-blur-sm hover:scale-105 hover:shadow-2xl ${colorClasses.glow} glass animate-fade-in`}
+                className={`group bg-gray-800/50 border-gray-700/50 hover:border-cyan-500/50 transition-all duration-500 backdrop-blur-sm hover:scale-105 hover:shadow-2xl ${colorClasses.glow} glass animate-fade-in`}
                 style={{
                   animationDelay: `${0.8 + index * 0.1}s`
                 }}
               >
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <h3 className={`text-xl font-bold ${colorClasses.text} group-hover:text-white transition-colors duration-300 mb-2`}>
-                      {skill.name}
-                    </h3>
-                    <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                      {skill.description}
-                    </p>
-                  </div>
-                  <div className="text-right ml-4">
-                    <span className={`text-2xl font-bold ${colorClasses.text}`}>{skill.level}%</span>
-                    <div className="flex items-center space-x-1 mt-1">
-                      <TrendingUp className={`w-4 h-4 ${colorClasses.text}`} />
-                      <span className="text-xs text-gray-400">Proficiency</span>
+                <CardHeader className="pb-4">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <CardTitle className={`text-xl ${colorClasses.text} group-hover:text-white transition-colors duration-300 mb-2`}>
+                        {skill.name}
+                      </CardTitle>
+                      <CardDescription className="text-gray-300 leading-relaxed">
+                        {skill.description}
+                      </CardDescription>
+                    </div>
+                    <div className="text-right ml-4">
+                      <span className={`text-2xl font-bold ${colorClasses.text}`}>{skill.level}%</span>
+                      <div className="flex items-center space-x-1 mt-1">
+                        <TrendingUp className={`w-4 h-4 ${colorClasses.text}`} />
+                        <span className="text-xs text-gray-400">Proficiency</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </CardHeader>
 
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden mb-4 shadow-inner">
-                  <div 
-                    className={`h-full ${colorClasses.progress} rounded-full transition-all duration-1000 ease-out shadow-lg animate-pulse-glow`}
-                    style={{ 
-                      width: `${skill.level}%`,
-                      animationDelay: `${0.8 + index * 0.1}s`
-                    }}
-                  ></div>
-                </div>
+                <CardContent className="pt-0">
+                  {/* Progress Bar */}
+                  <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden mb-4 shadow-inner">
+                    <div 
+                      className={`h-full ${colorClasses.progress} rounded-full transition-all duration-1000 ease-out shadow-lg animate-pulse-glow`}
+                      style={{ 
+                        width: `${skill.level}%`,
+                        animationDelay: `${0.8 + index * 0.1}s`
+                      }}
+                    ></div>
+                  </div>
 
-                {/* Frameworks/Technologies */}
-                <div className="flex flex-wrap gap-2">
-                  {skill.frameworks.map((framework, fIndex) => (
-                    <span 
-                      key={fIndex}
-                      className={`px-3 py-1 text-xs bg-gray-700/50 ${colorClasses.text} rounded-full border border-gray-600/50 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105`}
-                    >
-                      {framework}
-                    </span>
-                  ))}
-                </div>
-              </div>
+                  {/* Frameworks/Technologies */}
+                  <div className="flex flex-wrap gap-2">
+                    {skill.frameworks.map((framework, fIndex) => (
+                      <span 
+                        key={fIndex}
+                        className={`px-3 py-1 text-xs bg-gray-700/50 ${colorClasses.text} rounded-full border border-gray-600/50 hover:border-cyan-400/50 transition-all duration-300 hover:scale-105`}
+                      >
+                        {framework}
+                      </span>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
