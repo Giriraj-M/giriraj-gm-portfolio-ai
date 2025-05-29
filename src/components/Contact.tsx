@@ -100,8 +100,91 @@ const Contact = () => {
   };
 
   const downloadResume = () => {
-    // Placeholder for resume download
-    alert('Resume download would be implemented with actual PDF file');
+    // Create a sample CV content
+    const cvContent = `
+GIRIRAJ M - MACHINE LEARNING ENGINEER
+=====================================
+
+CONTACT INFORMATION
+-------------------
+Email: girirajm2006@gmail.com
+Phone: +91 9876543210
+Location: Coimbatore, India
+LinkedIn: linkedin.com/in/giriraj-m
+GitHub: github.com/Giriraj-M
+
+EDUCATION
+---------
+Bachelor of Technology in Computer Science & Engineering
+Dr. Mahalingam College of Engineering and Technology (2022-2026)
+Current GPA: 8.5/10
+Specialization: Machine Learning & Artificial Intelligence
+
+TECHNICAL SKILLS
+----------------
+Programming Languages: Python, JavaScript, SQL, TypeScript
+ML/AI Frameworks: PyTorch, TensorFlow, Scikit-learn, OpenCV
+Cloud Platforms: AWS (EC2, S3, Lambda, SageMaker)
+Web Technologies: React, Node.js, FastAPI, Flask
+Databases: PostgreSQL, MongoDB
+Tools: Docker, Git, Jupyter, VS Code
+
+KEY PROJECTS
+------------
+1. Advanced RAG System
+   - Next-generation retrieval-augmented generation
+   - Custom embedding models and vector databases
+   - Real-time question-answering capabilities
+
+2. AI Image Recognition System
+   - Real-time object detection using YOLO and TensorFlow
+   - 95%+ accuracy on test datasets
+   - Web-based interface for easy interaction
+
+3. Predictive Analytics Platform
+   - End-to-end ML pipeline with automated model selection
+   - Improved client decision-making by 40%
+   - Interactive dashboard with React frontend
+
+EXPERIENCE
+----------
+ML Engineer Intern | Tech Solutions Inc. (Remote)
+- Developed ML models improving accuracy by 25%
+- Implemented automated data preprocessing pipelines
+- Created model monitoring and evaluation systems
+
+AI Research Assistant | Dr. Mahalingam College
+- Leading computer vision and NLP research projects
+- Mentoring junior students in AI/ML concepts
+- Publishing research papers and findings
+
+ACHIEVEMENTS
+------------
+- Machine Learning Excellence Award (2024)
+- Hackathon Winner - AI Category (TechFest 2023)
+- Dean's List for Academic Excellence
+- 50+ merged open-source contributions
+
+CERTIFICATIONS
+--------------
+- Deep Learning Specialization (DeepLearning.AI)
+- AWS Machine Learning Specialty
+- TensorFlow Developer Certificate
+- Python for Data Science (IBM)
+
+This is a sample CV. For the complete detailed resume, please contact me directly.
+    `;
+
+    // Create and download the CV as a text file
+    const blob = new Blob([cvContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Giriraj_M_CV_Sample.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -125,10 +208,24 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Information */}
             <div className="space-y-8 animate-slide-in-left">
-              {/* Profile Card */}
+              {/* Profile Card with Real Image */}
               <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-xl p-8 rounded-3xl border border-gray-700/50 hover:border-cyan-500/50 transition-all duration-700 shadow-2xl text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-cyan-500/20 animate-pulse">
-                  <User className="w-16 h-16 text-white" />
+                <div className="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden shadow-2xl shadow-cyan-500/20 animate-pulse border-4 border-gradient-to-br from-cyan-400 to-purple-600">
+                  <img 
+                    src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=400&h=400&fit=crop&crop=face"
+                    alt="Giriraj M - ML Engineer"
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      // Fallback to User icon if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLDivElement;
+                      if (fallback) fallback.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-full bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full hidden items-center justify-center">
+                    <User className="w-16 h-16 text-white" />
+                  </div>
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2">Giriraj M</h3>
                 <p className="text-cyan-400 font-semibold mb-4">Machine Learning Engineer</p>

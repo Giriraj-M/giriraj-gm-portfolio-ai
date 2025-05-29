@@ -21,14 +21,54 @@ const Chatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [copiedMessageId, setCopiedMessageId] = useState<number | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [currentSuggestionSet, setCurrentSuggestionSet] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const suggestions: Suggestion[] = [
-    { text: "What projects has Giriraj worked on?", question: "Tell me about Giriraj's projects" },
-    { text: "What are his technical skills?", question: "What technical skills does Giriraj have?" },
-    { text: "How can I contact him?", question: "How can I contact Giriraj?" },
-    { text: "What's his educational background?", question: "Tell me about Giriraj's education" }
+  // Comprehensive suggestion sets covering all portfolio aspects
+  const suggestionSets: Suggestion[][] = [
+    // General Portfolio Questions
+    [
+      { text: "Tell me about Giriraj's background", question: "Tell me about Giriraj's background and expertise" },
+      { text: "What makes him unique in AI/ML?", question: "What makes Giriraj unique in the AI/ML field?" },
+      { text: "What's his professional summary?", question: "Give me Giriraj's professional summary" },
+      { text: "How can I collaborate with him?", question: "How can I collaborate with Giriraj?" }
+    ],
+    // Technical Skills & Expertise
+    [
+      { text: "What programming languages does he know?", question: "What programming languages does Giriraj know?" },
+      { text: "Which ML/AI frameworks does he use?", question: "Which ML/AI frameworks and libraries does Giriraj use?" },
+      { text: "What cloud platforms is he experienced with?", question: "What cloud platforms and tools is Giriraj experienced with?" },
+      { text: "Tell me about his database skills", question: "What database technologies does Giriraj work with?" }
+    ],
+    // Projects & Work
+    [
+      { text: "Show me his most impressive projects", question: "What are Giriraj's most impressive AI/ML projects?" },
+      { text: "What kind of computer vision work has he done?", question: "What computer vision projects has Giriraj worked on?" },
+      { text: "Tell me about his NLP projects", question: "What NLP and language processing projects has Giriraj built?" },
+      { text: "What web applications has he developed?", question: "What web applications and platforms has Giriraj created?" }
+    ],
+    // Education & Learning
+    [
+      { text: "Where does he study?", question: "Tell me about Giriraj's educational background" },
+      { text: "What's his GPA and academic performance?", question: "What is Giriraj's academic performance and GPA?" },
+      { text: "What certifications does he have?", question: "What certifications and courses has Giriraj completed?" },
+      { text: "Is he involved in research?", question: "What research activities is Giriraj involved in?" }
+    ],
+    // Experience & Achievements
+    [
+      { text: "What work experience does he have?", question: "What professional experience does Giriraj have?" },
+      { text: "What awards has he won?", question: "What awards and recognition has Giriraj received?" },
+      { text: "Tell me about his hackathon wins", question: "What hackathons has Giriraj won or participated in?" },
+      { text: "What leadership roles has he taken?", question: "What leadership roles and responsibilities has Giriraj had?" }
+    ],
+    // Contact & Collaboration
+    [
+      { text: "How can I reach him?", question: "What are the best ways to contact Giriraj?" },
+      { text: "Where is he located?", question: "Where is Giriraj located and available for work?" },
+      { text: "What social platforms is he on?", question: "What social media and professional platforms can I find Giriraj on?" },
+      { text: "Is he available for freelance work?", question: "Is Giriraj available for freelance or contract work?" }
+    ]
   ];
 
   const scrollToBottom = () => {
@@ -43,7 +83,7 @@ const Chatbot = () => {
     if (isOpen && messages.length === 0) {
       const welcomeMessage: Message = {
         id: Date.now(),
-        text: "🎉 Welcome to Giriraj's AI-powered portfolio assistant! 🤖✨\n\nI'm Giriraj's AI Assistant, trained specifically on his portfolio data to help you learn about his expertise in Machine Learning and AI. I can provide detailed insights about:\n\n🚀 His innovative ML/AI projects (RAG systems, computer vision, NLP)\n💻 Technical skills (Python, PyTorch, TensorFlow, AWS)\n🎓 Educational background at Dr. Mahalingam College\n🏆 Achievements and certifications\n📧 Contact information and collaboration opportunities\n\nFeel free to ask me anything about Giriraj's work or click on the suggestions below to get started! 🌟",
+        text: "🎉 Welcome to Giriraj's AI-powered portfolio assistant! 🤖✨\n\nI'm Giriraj's AI Assistant, trained specifically on his comprehensive portfolio data. I can provide detailed insights about:\n\n🚀 Innovative ML/AI projects (RAG systems, computer vision, NLP)\n💻 Technical expertise (Python, PyTorch, TensorFlow, AWS)\n🎓 Educational journey at Dr. Mahalingam College\n🏆 Achievements, certifications, and awards\n💼 Professional experience and internships\n📧 Contact information and collaboration opportunities\n🌟 Research work and publications\n\nI have answers to questions across 6 different categories. Use the navigation below to explore different aspects of Giriraj's expertise, or ask me anything directly! 🌟",
         isBot: true,
         timestamp: new Date()
       };
@@ -52,37 +92,121 @@ const Chatbot = () => {
   }, [isOpen]);
 
   const botResponses = {
-    projects: "Giriraj has developed impressive AI/ML projects including:\n\n🤖 AI Image Recognition System - Real-time object detection using TensorFlow and OpenCV\n📊 Predictive Analytics Platform - ML pipeline with automated model selection\n💬 NLP Tool - Advanced sentiment analysis and text classification\n🎯 Recommendation Engine - Collaborative filtering system\n🔍 Advanced RAG System - Next-gen retrieval-augmented generation\n👁️ Computer Vision Pipeline - Industrial automation solutions\n\nEach project showcases his expertise in different aspects of AI/ML. Check out his GitHub for detailed implementations!",
-    
-    skills: "Giriraj's technical expertise spans across:\n\n🐍 Programming: Python, JavaScript, SQL\n🧠 ML/AI: PyTorch, TensorFlow, Scikit-learn\n👁️ Computer Vision: OpenCV, YOLO\n💬 NLP: NLTK, Transformers, LangChain\n☁️ Cloud: AWS, Docker\n🗄️ Databases: PostgreSQL, MongoDB\n🌐 Web: React, FastAPI, Flask\n📊 Data: Pandas, NumPy, Matplotlib\n\nHe's particularly strong in developing end-to-end ML solutions and implementing cutting-edge research!",
-    
-    education: "Giriraj is pursuing his Bachelor of Technology in Computer Science & Engineering at Dr. Mahalingam College of Engineering and Technology (2022-2026).\n\n🎓 Current GPA: 8.5/10\n🔬 Specialization: Machine Learning & AI\n📚 Active in AI/ML Research Group\n📝 Published research papers on Deep Learning\n👥 Leadership role in Technology Student Society\n🏆 Dean's List for academic excellence",
-    
-    contact: "You can reach Giriraj through multiple channels:\n\n📧 Email: girirajm2006@gmail.com\n💼 LinkedIn: linkedin.com/in/giriraj-m\n👨‍💻 GitHub: github.com/Giriraj-M\n🏠 Location: Coimbatore, India\n\nHe's always open to discussing AI projects, collaborations, and innovative ML solutions. Feel free to reach out!",
-    
-    experience: "Giriraj has gained valuable experience through:\n\n💼 ML Engineer Intern at Tech Solutions Inc. (Remote) - Developed ML models improving accuracy by 25%\n🔬 AI Research Assistant at Dr. Mahalingam College - Leading computer vision and NLP research\n💻 Freelance ML Developer - Delivered 15+ projects, improving client efficiency by 30%\n\nHis hands-on experience spans across various domains including predictive analytics, automation systems, and research publications.",
-    
-    achievements: "Giriraj's notable achievements include:\n\n🏆 Machine Learning Excellence Award (2024)\n📝 AI Research Paper Publications\n🥇 Hackathon Winner - AI Category (TechFest 2023)\n🎓 Deep Learning Certification (DeepLearning.AI)\n🌟 Open Source Contributor (50+ merged PRs)\n👨‍🏫 Student Tech Leader (mentored 50+ students)\n\nThese achievements demonstrate his commitment to excellence in AI and Machine Learning!",
-    
-    default: "That's an interesting question! I'm specifically trained on Giriraj's portfolio data and can provide detailed information about his:\n\n• Projects and technical work\n• Skills and expertise\n• Education and achievements\n• Contact information\n• Professional experience\n\nFeel free to ask me anything specific about Giriraj's AI/ML work, or use the suggestions below for quick insights!"
+    // General & Background
+    background: "Giriraj M is a passionate Machine Learning Engineer and Computer Science student at Dr. Mahalingam College of Engineering and Technology (2022-2026). With a current GPA of 8.5/10, he specializes in developing cutting-edge AI/ML solutions.\n\n🎯 Core Focus Areas:\n• Machine Learning & Deep Learning\n• Computer Vision & Image Processing\n• Natural Language Processing\n• Predictive Analytics & Data Science\n• Full-stack AI Application Development\n\n🌟 What sets him apart:\n• Strong foundation in both theoretical concepts and practical implementation\n• Experience with end-to-end ML pipeline development\n• Active contributor to open-source AI projects\n• Published research in AI/ML domains\n• Proven track record in hackathons and competitions",
+
+    unique: "What makes Giriraj unique in the AI/ML field:\n\n🧠 Technical Excellence:\n• Proficient in multiple ML frameworks (PyTorch, TensorFlow, Scikit-learn)\n• Expert in computer vision with OpenCV and YOLO implementations\n• Advanced NLP skills with Transformers and LangChain\n• Cloud deployment expertise with AWS and Docker\n\n🚀 Innovation Mindset:\n• Develops novel solutions for real-world problems\n• Integrates cutting-edge research into practical applications\n• Creates scalable and efficient AI systems\n• Focus on user-centered AI design\n\n👥 Leadership & Collaboration:\n• Mentored 50+ students in AI/ML concepts\n• Active in technology communities and research groups\n• Strong communication skills for technical concepts\n• Experience working in cross-functional teams",
+
+    summary: "Professional Summary - Giriraj M:\n\n🎓 Computer Science Engineering Student (2022-2026)\n📍 Dr. Mahalingam College of Engineering and Technology\n⭐ GPA: 8.5/10 | Dean's List Recognition\n\n💼 Professional Experience:\n• ML Engineer Intern at Tech Solutions Inc. (Remote)\n• AI Research Assistant at Dr. Mahalingam College\n• Freelance ML Developer (15+ successful projects)\n\n🏆 Key Achievements:\n• Machine Learning Excellence Award (2024)\n• Hackathon Winner - AI Category (TechFest 2023)\n• Published AI research papers\n• 50+ merged open-source contributions\n\n🔬 Specializations:\n• End-to-end ML pipeline development\n• Computer vision and image processing\n• NLP and text analytics\n• Predictive modeling and analytics\n• AI system deployment and optimization",
+
+    // Technical Skills
+    programming: "Giriraj's Programming Expertise:\n\n🐍 Primary Languages:\n• Python - Advanced (ML/AI development, data science)\n• JavaScript/TypeScript - Proficient (web development, APIs)\n• SQL - Advanced (database management, analytics)\n• R - Intermediate (statistical analysis)\n\n⚡ Specialized Skills:\n• Data Structures & Algorithms\n• Object-Oriented Programming\n• Functional Programming concepts\n• Version control with Git/GitHub\n• Code optimization and debugging\n• Testing and documentation\n\n🛠️ Development Tools:\n• Jupyter Notebooks, VS Code\n• PyCharm, Google Colab\n• Docker for containerization\n• CI/CD pipeline setup",
+
+    frameworks: "ML/AI Frameworks & Libraries Expertise:\n\n🧠 Deep Learning:\n• PyTorch - Advanced (neural networks, custom models)\n• TensorFlow/Keras - Proficient (production models)\n• Transformers - Advanced (NLP, language models)\n• OpenCV - Expert (computer vision)\n\n📊 Machine Learning:\n• Scikit-learn - Advanced (classical ML algorithms)\n• XGBoost/LightGBM - Proficient (ensemble methods)\n• NLTK/spaCy - Advanced (text processing)\n• LangChain - Proficient (LLM applications)\n\n📈 Data Science:\n• Pandas/NumPy - Expert (data manipulation)\n• Matplotlib/Seaborn - Advanced (visualization)\n• Plotly - Proficient (interactive charts)\n• Apache Spark - Intermediate (big data)",
+
+    cloud: "Cloud Platforms & DevOps Skills:\n\n☁️ Amazon Web Services (AWS):\n• EC2, S3, Lambda functions\n• SageMaker for ML model deployment\n• RDS for database management\n• CloudWatch for monitoring\n\n🐳 Containerization & Deployment:\n• Docker - Advanced (container creation, management)\n• Docker Compose for multi-container apps\n• Container orchestration basics\n• CI/CD pipeline setup\n\n🗄️ Additional Tools:\n• Git/GitHub for version control\n• Linux/Unix system administration\n• API development and integration\n• Cloud security best practices",
+
+    // Projects
+    projects: "Giriraj's Most Impressive AI/ML Projects:\n\n🤖 Advanced RAG System:\n• Next-generation retrieval-augmented generation\n• Custom embedding models and vector databases\n• Real-time question-answering capabilities\n• Deployed using FastAPI and Docker\n\n🎯 Predictive Analytics Platform:\n• End-to-end ML pipeline with automated model selection\n• Real-time data processing and prediction\n• Interactive dashboard with React frontend\n• Improved client decision-making by 40%\n\n🧠 AI Image Recognition System:\n• Real-time object detection using YOLO and TensorFlow\n• Custom dataset creation and model training\n• Web-based interface for easy interaction\n• 95%+ accuracy on test datasets\n\n🔍 Recommendation Engine:\n• Collaborative filtering with deep learning\n• Handles both explicit and implicit feedback\n• Scalable architecture for large datasets\n• Integrated with e-commerce platforms",
+
+    computer_vision: "Computer Vision Projects Portfolio:\n\n👁️ Industrial Automation Solution:\n• Real-time quality control system\n• Defect detection using CNN models\n• Reduced manual inspection time by 80%\n• Deployed in manufacturing environment\n\n📸 Smart Image Analysis Tool:\n• Multi-class image classification\n• Object detection and segmentation\n• Custom annotation pipeline\n• Transfer learning optimization\n\n🚗 Autonomous Vehicle Component:\n• Lane detection and tracking\n• Traffic sign recognition\n• Real-time video processing\n• Edge device deployment ready\n\n🎨 Creative AI Applications:\n• Style transfer implementation\n• Image enhancement algorithms\n• Artistic filter generation\n• Mobile app integration",
+
+    nlp: "Natural Language Processing Projects:\n\n💬 Advanced Sentiment Analysis:\n• Multi-language sentiment detection\n• Real-time social media monitoring\n• Custom transformer model fine-tuning\n• 92% accuracy across different domains\n\n📝 Intelligent Text Summarization:\n• Extractive and abstractive summarization\n• Document processing pipeline\n• API for integration with other systems\n• Support for multiple document formats\n\n🔍 Information Extraction System:\n• Named Entity Recognition (NER)\n• Relationship extraction from text\n• Knowledge graph construction\n• Enterprise search optimization\n\n🤖 Chatbot Development:\n• Context-aware conversational AI\n• Intent recognition and slot filling\n• Integration with business systems\n• Multi-turn dialogue management",
+
+    // Education
+    education: "Educational Background - Dr. Mahalingam College:\n\n🎓 Bachelor of Technology (B.Tech)\n📚 Computer Science & Engineering (2022-2026)\n🏫 Dr. Mahalingam College of Engineering and Technology\n⭐ Current GPA: 8.5/10\n🏆 Dean's List Recognition for Academic Excellence\n\n🔬 Specialization Focus:\n• Machine Learning & Artificial Intelligence\n• Data Structures & Advanced Algorithms\n• Database Management Systems\n• Software Engineering & Design Patterns\n• Computer Networks & Security\n\n👥 Extracurricular Involvement:\n• AI/ML Research Group Member\n• Technology Student Society Leadership\n• Peer tutoring and mentorship programs\n• Technical workshop organization",
+
+    academic_performance: "Academic Excellence & Performance:\n\n📊 Current Statistics:\n• Overall GPA: 8.5/10\n• Dean's List: Multiple semesters\n• Class Ranking: Top 10%\n• Research Publications: 2+ papers\n\n🏆 Academic Achievements:\n• Outstanding Student in Computer Science (2023)\n• Best Project Award for AI Implementation\n• Scholarship recipient for academic merit\n• Perfect attendance in core subjects\n\n📚 Key Course Highlights:\n• Machine Learning: A+ grade\n• Data Structures & Algorithms: A+ grade\n• Database Systems: A grade\n• Software Engineering: A+ grade\n• Computer Networks: A grade\n\n🔬 Research Involvement:\n• Active member of AI/ML research lab\n• Contributing to ongoing research projects\n• Paper submissions to conferences\n• Collaboration with faculty on innovative solutions",
+
+    certifications: "Professional Certifications & Continuous Learning:\n\n🎯 AI/ML Certifications:\n• Deep Learning Specialization (DeepLearning.AI)\n• Machine Learning Course (Stanford/Coursera)\n• AWS Machine Learning Specialty\n• TensorFlow Developer Certificate\n\n☁️ Cloud & DevOps:\n• AWS Solutions Architect Associate\n• Docker Fundamentals Certification\n• Kubernetes Basics Certificate\n• Git & GitHub Professional Certificate\n\n📊 Data Science:\n• Python for Data Science (IBM)\n• Data Analysis with Pandas\n• Statistical Methods in Machine Learning\n• Data Visualization with Matplotlib\n\n🌐 Web Development:\n• React.js Development Certificate\n• Node.js Backend Development\n• RESTful API Design Principles\n• Full-Stack Development Bootcamp",
+
+    // Experience
+    experience: "Professional Experience & Internships:\n\n💼 ML Engineer Intern | Tech Solutions Inc. (Remote)\n📅 Duration: 6 months\n🎯 Achievements:\n• Developed ML models improving accuracy by 25%\n• Implemented automated data preprocessing pipelines\n• Created model monitoring and evaluation systems\n• Collaborated with cross-functional teams\n\n🔬 AI Research Assistant | Dr. Mahalingam College\n📅 Duration: Ongoing (1+ year)\n🎯 Responsibilities:\n• Leading computer vision and NLP research projects\n• Mentoring junior students in AI/ML concepts\n• Publishing research papers and findings\n• Organizing technical workshops and seminars\n\n💻 Freelance ML Developer\n📅 Duration: 2+ years\n🎯 Portfolio:\n• Delivered 15+ successful projects\n• Improved client operational efficiency by 30%\n• Specializing in computer vision and NLP solutions\n• Built long-term client relationships",
+
+    achievements: "Awards, Recognition & Achievements:\n\n🏆 Major Awards:\n• Machine Learning Excellence Award (2024)\n• Outstanding Computer Science Student (2023)\n• Innovation in AI Technology Award (2023)\n• Academic Merit Scholarship Recipient\n\n🥇 Competition Success:\n• Hackathon Winner - AI Category (TechFest 2023)\n• Runner-up in National ML Competition (2023)\n• Best Project Award - College Tech Fest\n• Coding Competition Regional Champion\n\n📝 Publications & Research:\n• 2+ research papers in AI/ML conferences\n• Technical blog posts with 10K+ views\n• Open-source contributions featured in tech media\n• Speaker at university tech symposiums\n\n👥 Leadership & Community:\n• Student Tech Leader (mentored 50+ students)\n• AI/ML Workshop Organizer\n• Peer tutoring program coordinator\n• University tech society board member",
+
+    // Contact & Collaboration
+    contact: "Contact Information & Ways to Connect:\n\n📧 Primary Contact:\n• Email: girirajm2006@gmail.com\n• Response time: Within 24 hours\n• Available for project discussions\n\n💼 Professional Networks:\n• LinkedIn: linkedin.com/in/giriraj-m\n• GitHub: github.com/Giriraj-M\n• Portfolio: giriraj-portfolio.com\n\n🏠 Location & Availability:\n• Based in: Coimbatore, India\n• Open to: Remote work, relocation\n• Time zones: Flexible for global collaboration\n• Languages: English (fluent), Tamil (native)\n\n📱 Additional Platforms:\n• LeetCode: GIRIRAJ_M (800+ problems solved)\n• HackerRank: girirajm2006 (5-star rating)\n• Kaggle: Active competition participant",
+
+    location: "Location & Work Preferences:\n\n📍 Current Location:\n• City: Coimbatore, Tamil Nadu, India\n• Country: India\n• Time Zone: IST (GMT+5:30)\n\n🌍 Work Flexibility:\n• Remote Work: Preferred and experienced\n• Hybrid Models: Open to discussion\n• Relocation: Willing for right opportunities\n• Travel: Available for client meetings/projects\n\n🕒 Availability:\n• Full-time opportunities: Available from 2026\n• Part-time/Freelance: Currently available\n• Internships: Actively seeking summer positions\n• Consulting: Available for short-term projects\n\n🗣️ Communication:\n• English: Business fluent\n• Tamil: Native speaker\n• Hindi: Conversational\n• Time zone coordination: Flexible for global teams",
+
+    social: "Social Media & Professional Platforms:\n\n💼 Professional Presence:\n• LinkedIn: linkedin.com/in/giriraj-m\n  - 500+ connections in AI/ML industry\n  - Regular posts about latest AI trends\n  - Professional endorsements and recommendations\n\n👨‍💻 Code & Development:\n• GitHub: github.com/Giriraj-M\n  - 50+ repositories with AI/ML projects\n  - Active contributor to open-source projects\n  - Showcase of full-stack applications\n\n🧮 Competitive Programming:\n• LeetCode: GIRIRAJ_M\n  - 800+ problems solved\n  - Contest rating: 1650+\n  - Focus on algorithm optimization\n\n• HackerRank: girirajm2006\n  - 5-star rating in Python\n  - Problem-solving badges\n  - Active in ML/AI challenges",
+
+    freelance: "Freelance & Contract Work Availability:\n\n✅ Currently Available For:\n• Machine Learning model development\n• Computer vision applications\n• NLP and text analytics projects\n• Data science consulting\n• AI system architecture design\n• Web application development with AI integration\n\n💰 Service Offerings:\n• Project-based development\n• Technical consulting and advisory\n• Code review and optimization\n• Training and workshop delivery\n• Research and development partnerships\n\n⏰ Capacity & Commitment:\n• Part-time availability: 20-25 hours/week\n• Project duration: Flexible (1 week to 6 months)\n• Communication: Regular updates and meetings\n• Delivery: On-time with quality assurance\n\n📋 Previous Client Feedback:\n• 98% client satisfaction rate\n• Average project completion: 15% ahead of schedule\n• Long-term relationships with repeat clients\n• Expertise in translating business needs to technical solutions",
+
+    default: "That's a great question! I'm Giriraj's comprehensive AI assistant with detailed knowledge about:\n\n🎯 **Portfolio Categories Available:**\n\n1. **General & Background** - Personal summary, unique qualities\n2. **Technical Skills** - Programming, frameworks, cloud platforms  \n3. **Projects & Work** - AI/ML projects, computer vision, NLP\n4. **Education** - Academic background, performance, research\n5. **Experience** - Internships, work history, achievements\n6. **Contact & Collaboration** - Ways to connect, availability\n\nYou can ask specific questions about any of these areas, or use the category buttons below to explore different aspects of Giriraj's expertise. I'm here to provide detailed, accurate information about his skills, experience, and how you can work together!"
   };
 
   const generateBotResponse = (userMessage: string): string => {
     const message = userMessage.toLowerCase();
     
-    if (message.includes('project') || message.includes('work') || message.includes('github') || message.includes('portfolio')) {
+    // General & Background
+    if (message.includes('background') || message.includes('summary') || message.includes('about')) {
+      return botResponses.background;
+    } else if (message.includes('unique') || message.includes('special') || message.includes('different')) {
+      return botResponses.unique;
+    } else if (message.includes('professional summary') || message.includes('overview')) {
+      return botResponses.summary;
+    }
+    
+    // Technical Skills
+    else if (message.includes('programming') || message.includes('languages') || message.includes('python') || message.includes('javascript')) {
+      return botResponses.programming;
+    } else if (message.includes('framework') || message.includes('pytorch') || message.includes('tensorflow') || message.includes('library')) {
+      return botResponses.frameworks;
+    } else if (message.includes('cloud') || message.includes('aws') || message.includes('docker') || message.includes('deployment')) {
+      return botResponses.cloud;
+    } else if (message.includes('database') || message.includes('sql') || message.includes('mongodb')) {
+      return botResponses.cloud;
+    }
+    
+    // Projects
+    else if (message.includes('project') && (message.includes('impressive') || message.includes('best') || message.includes('top'))) {
       return botResponses.projects;
-    } else if (message.includes('skill') || message.includes('technology') || message.includes('python') || message.includes('ml') || message.includes('ai') || message.includes('technical')) {
-      return botResponses.skills;
-    } else if (message.includes('education') || message.includes('college') || message.includes('study') || message.includes('degree')) {
+    } else if (message.includes('computer vision') || message.includes('image') || message.includes('opencv') || message.includes('yolo')) {
+      return botResponses.computer_vision;
+    } else if (message.includes('nlp') || message.includes('natural language') || message.includes('text') || message.includes('language processing')) {
+      return botResponses.nlp;
+    } else if (message.includes('web') || message.includes('application') || message.includes('platform')) {
+      return botResponses.projects;
+    }
+    
+    // Education
+    else if (message.includes('education') || message.includes('college') || message.includes('study') || message.includes('degree')) {
       return botResponses.education;
-    } else if (message.includes('contact') || message.includes('email') || message.includes('reach') || message.includes('connect')) {
-      return botResponses.contact;
-    } else if (message.includes('experience') || message.includes('internship') || message.includes('job') || message.includes('work')) {
+    } else if (message.includes('gpa') || message.includes('academic') || message.includes('performance') || message.includes('grades')) {
+      return botResponses.academic_performance;
+    } else if (message.includes('certification') || message.includes('course') || message.includes('certificate')) {
+      return botResponses.certifications;
+    } else if (message.includes('research') || message.includes('publication') || message.includes('paper')) {
+      return botResponses.academic_performance;
+    }
+    
+    // Experience & Achievements
+    else if (message.includes('experience') || message.includes('internship') || message.includes('job') || message.includes('work')) {
       return botResponses.experience;
     } else if (message.includes('achievement') || message.includes('award') || message.includes('recognition') || message.includes('accomplishment')) {
       return botResponses.achievements;
-    } else {
+    } else if (message.includes('hackathon') || message.includes('competition') || message.includes('contest')) {
+      return botResponses.achievements;
+    } else if (message.includes('leadership') || message.includes('mentor') || message.includes('lead')) {
+      return botResponses.achievements;
+    }
+    
+    // Contact & Collaboration
+    else if (message.includes('contact') || message.includes('email') || message.includes('reach') || message.includes('connect')) {
+      return botResponses.contact;
+    } else if (message.includes('location') || message.includes('where') || message.includes('based') || message.includes('live')) {
+      return botResponses.location;
+    } else if (message.includes('social') || message.includes('linkedin') || message.includes('github') || message.includes('platform')) {
+      return botResponses.social;
+    } else if (message.includes('freelance') || message.includes('available') || message.includes('hire') || message.includes('contract')) {
+      return botResponses.freelance;
+    } else if (message.includes('collaborate') || message.includes('work together') || message.includes('partnership')) {
+      return botResponses.freelance;
+    }
+    
+    else {
       return botResponses.default;
     }
   };
@@ -136,11 +260,28 @@ const Chatbot = () => {
     }
   };
 
+  const nextSuggestionSet = () => {
+    setCurrentSuggestionSet((prev) => (prev + 1) % suggestionSets.length);
+  };
+
+  const prevSuggestionSet = () => {
+    setCurrentSuggestionSet((prev) => (prev - 1 + suggestionSets.length) % suggestionSets.length);
+  };
+
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  const categoryNames = [
+    "General & Background",
+    "Technical Skills", 
+    "Projects & Work",
+    "Education & Learning",
+    "Experience & Achievements",
+    "Contact & Collaboration"
+  ];
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -157,7 +298,7 @@ const Chatbot = () => {
                 <h3 className="text-white font-semibold">Giriraj's AI Assistant</h3>
                 <p className="text-gray-400 text-xs flex items-center space-x-1">
                   <Brain className="w-3 h-3" />
-                  <span>Online • Ready to help</span>
+                  <span>Portfolio Expert • Ready to help</span>
                 </p>
               </div>
             </div>
@@ -204,15 +345,41 @@ const Chatbot = () => {
               </div>
             ))}
             
-            {/* Suggestions */}
+            {/* Suggestions with Category Navigation */}
             {showSuggestions && messages.length === 1 && (
-              <div className="space-y-2">
-                <p className="text-xs text-gray-400 text-center">Quick questions about Giriraj:</p>
-                {suggestions.map((suggestion, index) => (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-gray-400">Portfolio Categories:</p>
+                  <div className="flex items-center space-x-1">
+                    <button 
+                      onClick={prevSuggestionSet}
+                      className="text-xs text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded"
+                    >
+                      ←
+                    </button>
+                    <span className="text-xs text-gray-500">
+                      {currentSuggestionSet + 1}/{suggestionSets.length}
+                    </span>
+                    <button 
+                      onClick={nextSuggestionSet}
+                      className="text-xs text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded"
+                    >
+                      →
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="text-center">
+                  <h4 className="text-sm font-medium text-cyan-400 mb-2">
+                    {categoryNames[currentSuggestionSet]}
+                  </h4>
+                </div>
+                
+                {suggestionSets[currentSuggestionSet].map((suggestion, index) => (
                   <button
                     key={index}
                     onClick={() => handleSuggestionClick(suggestion)}
-                    className="w-full text-left p-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-cyan-400 text-sm transition-all duration-300 border border-gray-700/30 hover:border-cyan-500/50"
+                    className="w-full text-left p-3 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-cyan-400 text-sm transition-all duration-300 border border-gray-700/30 hover:border-cyan-500/50 hover:scale-[1.02]"
                   >
                     {suggestion.text}
                   </button>
@@ -244,7 +411,7 @@ const Chatbot = () => {
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask me about Giriraj's skills, projects, or experience..."
+                placeholder="Ask about skills, projects, experience, or anything else..."
                 className="flex-1 bg-gray-700/50 text-white placeholder-gray-400 px-4 py-3 rounded-xl border border-gray-600/30 focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 text-sm backdrop-blur-sm"
               />
               <button
@@ -260,11 +427,11 @@ const Chatbot = () => {
             <div className="flex items-center justify-between text-xs text-gray-500">
               <div className="flex items-center space-x-2">
                 <Sparkles className="w-3 h-3" />
-                <span>Trained on Giriraj's Portfolio Data</span>
+                <span>Comprehensive Portfolio Data</span>
               </div>
               <div className="flex items-center space-x-1">
                 <Brain className="w-3 h-3" />
-                <span>AI Powered Solution</span>
+                <span>AI Expert Assistant</span>
               </div>
             </div>
           </div>
