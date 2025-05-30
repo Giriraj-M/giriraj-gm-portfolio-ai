@@ -69,7 +69,7 @@ const Index = () => {
 
       <Navigation currentSection={currentSection} setCurrentSection={setCurrentSection} />
       
-      {/* Hero Section - NO Container Box */}
+      {/* Hero Section */}
       <section id="home" className="min-h-screen flex items-center justify-center relative overflow-hidden py-20">
         <div className="container mx-auto px-6 z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -78,7 +78,7 @@ const Index = () => {
               <div className="relative group">
                 <div className="w-80 h-80 bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-xl rounded-2xl flex items-center justify-center border border-gray-700/30 group-hover:border-cyan-500/50 transition-all duration-500 hover:scale-105">
                   <div className="text-center">
-                    <div className="w-32 h-32 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-all duration-500 animate-pulse-glow">
+                    <div className="w-32 h-32 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-2xl shadow-cyan-500/20 transition-all duration-500">
                       <User className="w-16 h-16 text-white" />
                     </div>
                     <p className="text-gray-400">Profile Image Placeholder</p>
@@ -108,7 +108,7 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center mb-8 animate-fade-in-up" style={{animationDelay: '0.8s'}}>
                 <button
                   onClick={() => scrollToSection('projects')}
-                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 neon-glow"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105"
                 >
                   <span className="flex items-center space-x-2">
                     <span>View Projects</span>
@@ -127,38 +127,73 @@ const Index = () => {
                 </button>
               </div>
 
-              {/* Social Links with Location */}
+              {/* Social Links with Tooltips */}
               <div className="flex justify-center lg:justify-start space-x-6 mb-8 animate-fade-in-up" style={{animationDelay: '1s'}}>
-                <a href="mailto:girirajm2006@gmail.com" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-cyan-500 transition-all duration-300 glass">
-                    <Mail className="w-6 h-6 text-cyan-400 group-hover:text-white" />
+                <div className="relative group">
+                  <a href="mailto:girirajm2006@gmail.com" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-cyan-500 transition-all duration-300 glass">
+                      <Mail className="w-6 h-6 text-cyan-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    Email
                   </div>
-                </a>
-                <a href="https://linkedin.com/in/giriraj-m" target="_blank" rel="noopener noreferrer" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-all duration-300 glass">
-                    <Linkedin className="w-6 h-6 text-blue-400 group-hover:text-white" />
+                </div>
+
+                <div className="relative group">
+                  <a href="https://linkedin.com/in/giriraj-m" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-all duration-300 glass">
+                      <Linkedin className="w-6 h-6 text-blue-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    LinkedIn
                   </div>
-                </a>
-                <a href="https://github.com/Giriraj-M" target="_blank" rel="noopener noreferrer" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-gray-600 transition-all duration-300 glass">
-                    <Github className="w-6 h-6 text-gray-400 group-hover:text-white" />
+                </div>
+
+                <div className="relative group">
+                  <a href="https://github.com/Giriraj-M" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-gray-600 transition-all duration-300 glass">
+                      <Github className="w-6 h-6 text-gray-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    GitHub
                   </div>
-                </a>
-                <a href="https://leetcode.com/u/GIRIRAJ_M/" target="_blank" rel="noopener noreferrer" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-yellow-500 transition-all duration-300 glass">
-                    <LeetCodeIcon className="w-6 h-6 text-yellow-400 group-hover:text-white" />
+                </div>
+
+                <div className="relative group">
+                  <a href="https://leetcode.com/u/GIRIRAJ_M/" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-yellow-500 transition-all duration-300 glass">
+                      <LeetCodeIcon className="w-6 h-6 text-yellow-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    LeetCode
                   </div>
-                </a>
-                <a href="https://www.hackerrank.com/profile/girirajm2006" target="_blank" rel="noopener noreferrer" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-green-500 transition-all duration-300 glass">
-                    <HackerRankIcon className="w-6 h-6 text-green-400 group-hover:text-white" />
+                </div>
+
+                <div className="relative group">
+                  <a href="https://www.hackerrank.com/profile/girirajm2006" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-green-500 transition-all duration-300 glass">
+                      <HackerRankIcon className="w-6 h-6 text-green-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    HackerRank
                   </div>
-                </a>
-                <a href="https://maps.google.com/?q=Coimbatore,India" target="_blank" rel="noopener noreferrer" className="group hover:scale-110 transition-all duration-300 interactive-scale">
-                  <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-red-500 transition-all duration-300 glass">
-                    <MapPin className="w-6 h-6 text-red-400 group-hover:text-white" />
+                </div>
+
+                <div className="relative group">
+                  <a href="https://maps.google.com/?q=Coimbatore,India" target="_blank" rel="noopener noreferrer" className="hover:scale-110 transition-all duration-300 interactive-scale block">
+                    <div className="w-12 h-12 bg-gray-800/50 rounded-xl flex items-center justify-center group-hover:bg-red-500 transition-all duration-300 glass">
+                      <MapPin className="w-6 h-6 text-red-400 group-hover:text-white" />
+                    </div>
+                  </a>
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    Location
                   </div>
-                </a>
+                </div>
               </div>
               
               <div className="animate-bounce">

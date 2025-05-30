@@ -51,9 +51,9 @@ const Navigation: React.FC<NavigationProps> = ({ currentSection, setCurrentSecti
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-gray-900/80 via-gray-800/80 to-black/80 backdrop-blur-xl border-b border-gray-700/30">
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between h-16">
-          {/* Logo with styled G and M */}
+          {/* Logo with styled G and M - removed glowing effect */}
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 animate-pulse">
+            <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <span className="text-xl font-bold">
                 <span className="text-cyan-300">G</span>
                 <span className="text-purple-300">M</span>
