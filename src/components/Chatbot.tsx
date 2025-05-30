@@ -304,12 +304,6 @@ const Chatbot = () => {
     handleSendMessage(question);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
-    }
-  };
-
   const copyToClipboard = async (text: string, messageId: number) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -376,7 +370,7 @@ const Chatbot = () => {
 
       {/* Enhanced Chat Window */}
       {isOpen && (
-        <div className="bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-black/95 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl mb-4 w-96 hover:shadow-cyan-500/20 transition-all duration-700 animate-scale-in">
+        <div className="fixed bottom-24 right-6 z-50 bg-gradient-to-br from-gray-900/95 via-gray-800/95 to-black/95 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-2xl w-96 hover:shadow-cyan-500/20 transition-all duration-700 animate-scale-in">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
             <div className="flex items-center space-x-3">
